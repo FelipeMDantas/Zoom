@@ -9,13 +9,27 @@ import {
   EuiText,
   EuiTextColor,
 } from "@elastic/eui";
-import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { query, where } from "firebase/firestore";
+import {
+  GoogleAuthProvider,
+  onAuthStateChanged,
+  signInWithPopup,
+} from "firebase/auth";
+import { addDoc, getDocs, query, where } from "firebase/firestore";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import animation from "../assets/animation.gif";
 import logo from "../assets/logo.png";
 import { firebaseAuth, userRef } from "../utils/FirebaseConfig";
+import { setUser } from "../app/slices/AuthSlice";
 
 const Login = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  onAuthStateChanged(firebaseAuth, (currentUser) => {
+    if (currentUser) navigate("/");
+  });
+
   const login = async () => {
     const provider = new GoogleAuthProvider();
     const {
@@ -23,7 +37,14 @@ const Login = () => {
     } = await signInWithPopup(firebaseAuth, provider);
     if (email) {
       const firestoreQuery = query(userRef, where("uid", "==", uid));
+      const fetchedUsers = await getDocs(firestoreQuery);
+
+      if (fetchedUsers.docs.length === 0) {
+        await addDoc(userRef, { uid, name: displayName, email });
+      }
     }
+    dispatch(setUser({ uid, name: displayName, email }));
+    navigate("/");
   };
 
   return (
