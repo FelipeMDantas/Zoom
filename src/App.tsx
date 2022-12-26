@@ -2,6 +2,8 @@ import { EuiProvider, EuiThemeColorMode, EuiThemeProvider } from "@elastic/eui";
 import { useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "./app/hooks";
+import ThemeSelector from "./components/ThemeSelector";
+import CreateMeeting from "./pages/CreateMeeting";
 import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
 
@@ -30,15 +32,18 @@ const App = () => {
   };
 
   return (
-    <EuiProvider colorMode={theme}>
-      <EuiThemeProvider modify={overrides}>
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/" element={<Dashboard />} />
-          <Route path="*" element={<Dashboard />} />
-        </Routes>
-      </EuiThemeProvider>
-    </EuiProvider>
+    <ThemeSelector>
+      <EuiProvider colorMode={theme}>
+        <EuiThemeProvider modify={overrides}>
+          <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route path="/create" element={<CreateMeeting />} />
+            <Route path="/" element={<Dashboard />} />
+            <Route path="*" element={<Dashboard />} />
+          </Routes>
+        </EuiThemeProvider>
+      </EuiProvider>
+    </ThemeSelector>
   );
 };
 

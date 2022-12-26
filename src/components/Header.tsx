@@ -115,6 +115,47 @@ const Header = () => {
         </Link>,
       ],
     },
+    {
+      items: [
+        <EuiFlexGroup
+          justifyContent="center"
+          alignItems="center"
+          direction="row"
+          style={{ gap: "2vw" }}
+        >
+          <EuiFlexItem grow={false} style={{ flexBasis: "fit-content" }}>
+            {isDarkTheme ? (
+              <EuiButtonIcon
+                onClick={invertTheme}
+                iconType="sun"
+                color="warning"
+                display="fill"
+                size="s"
+                aria-label="invert-theme-button"
+              />
+            ) : (
+              <EuiButtonIcon
+                onClick={invertTheme}
+                iconType="moon"
+                color="ghost"
+                display="fill"
+                size="s"
+                aria-label="invert-theme-button"
+              />
+            )}
+          </EuiFlexItem>
+          <EuiFlexItem grow={false} style={{ flexBasis: "fit-content" }}>
+            <EuiButtonIcon
+              onClick={logout}
+              iconType="lock"
+              display="fill"
+              size="s"
+              aria-label="logout-button"
+            />
+          </EuiFlexItem>
+        </EuiFlexGroup>,
+      ],
+    },
   ];
 
   useEffect(() => {
