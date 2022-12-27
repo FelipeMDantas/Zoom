@@ -12,6 +12,7 @@ import { useDispatch } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAppSelector } from "../app/hooks";
 import { changeTheme } from "../app/slices/AuthSlice";
+import { getCreateMeetingBreadCrumbs } from "../utils/breadCrumbs";
 import { firebaseAuth } from "../utils/FirebaseConfig";
 
 const Header = () => {
@@ -27,6 +28,12 @@ const Header = () => {
   const logout = () => {
     signOut(firebaseAuth);
   };
+
+  useEffect(() => {
+    const { pathname } = location;
+    if (pathname === "/create")
+      setBreadCrumbs(getCreateMeetingBreadCrumbs(navigate));
+  }, [location, navigate]);
 
   const invertTheme = () => {
     const theme = localStorage.getItem("zoom-theme");
