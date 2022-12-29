@@ -1,4 +1,10 @@
-import { EuiFlexGroup, EuiForm, EuiSpacer } from "@elastic/eui";
+import {
+  EuiFlexGroup,
+  EuiForm,
+  EuiFormRow,
+  EuiSpacer,
+  EuiSwitch,
+} from "@elastic/eui";
 import { addDoc } from "firebase/firestore";
 import moment from "moment";
 import { useState } from "react";
@@ -16,7 +22,7 @@ import { FieldErrorType, UserType } from "../utils/Types";
 import useFetchUsers from "../hooks/useFetchUsers";
 import useToast from "../hooks/useToast";
 
-const OneOnOneMeeting = () => {
+const VideoConference = () => {
   useAuth();
   const [users] = useFetchUsers();
   const [createToast] = useToast();
@@ -26,6 +32,8 @@ const OneOnOneMeeting = () => {
   const [meetingName, setMeetingName] = useState("");
   const [selectedUsers, setSelectedUsers] = useState<Array<UserType>>([]);
   const [startDate, setStartDate] = useState(moment());
+  const [size, setSize] = useState(1);
+  const [anyoneCanJoin, setAnyoneCanJoin] = useState(false);
   const [showErrors, setShowErrors] = useState<{
     meetingName: FieldErrorType;
     meetingUser: FieldErrorType;
@@ -78,14 +86,18 @@ const OneOnOneMeeting = () => {
         createdBy: uid,
         meetingId,
         meetingName,
-        meetingType: "1-on-1",
-        invitedUsers: [selectedUsers[0].uid],
+        meetingType: anyoneCanJoin ? "anyone-can-join" : "video-conference",
+        invitedUsers: anyoneCanJoin
+          ? []
+          : selectedUsers.map((user: UserType) => user.uid),
         meetingDate: startDate.format("L"),
-        maxUsers: 1,
+        maxUsers: anyoneCanJoin ? 100 : size,
         status: true,
       });
       createToast({
-        title: "One on One Meeting created successfully.",
+        title: anyoneCanJoin
+          ? "Anyone Can Join Meeting created successfully"
+          : "Video Conference created successfully",
         type: "success",
       });
       navigate("/");
@@ -97,6 +109,15 @@ const OneOnOneMeeting = () => {
       <Header />
       <EuiFlexGroup justifyContent="center" alignItems="center">
         <EuiForm>
+          <EuiFormRow display="columnCompressedSwitch" label="Anyone can join">
+            <EuiSwitch
+              showLabel={false}
+              label="Anyone can join"
+              checked={anyoneCanJoin}
+              onChange={(e) => setAnyoneCanJoin(e.target.checked)}
+              compressed
+            />
+          </EuiFormRow>
           <MeetingNameField
             label="Meeting Name"
             placeholder="Meeting Name"
@@ -125,4 +146,4 @@ const OneOnOneMeeting = () => {
   );
 };
 
-export default OneOnOneMeeting;
+export default VideoConference;
