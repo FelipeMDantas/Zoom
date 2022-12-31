@@ -12,6 +12,7 @@ import ThemeSelector from "./components/ThemeSelector";
 import CreateMeeting from "./pages/CreateMeeting";
 import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
+import MyMeetings from "./pages/MyMeetings";
 import OneOnOneMeeting from "./pages/OneOnOneMeeting";
 import VideoConference from "./pages/VideoConference";
 
@@ -43,7 +44,7 @@ const App = () => {
   const removeToast = (removeToast: { id: string }) => {
     dispatch(
       setToasts(
-        toasts.filter((toast: { id: string }) => toast.id === removeToast.id)
+        toasts.filter((toast: { id: string }) => toast.id !== removeToast.id)
       )
     );
   };
@@ -57,6 +58,7 @@ const App = () => {
             <Route path="/create" element={<CreateMeeting />} />
             <Route path="/create1on1" element={<OneOnOneMeeting />} />
             <Route path="/videoconference" element={<VideoConference />} />
+            <Route path="/mymeetings" element={<MyMeetings />} />
             <Route path="/" element={<Dashboard />} />
             <Route path="*" element={<Dashboard />} />
           </Routes>

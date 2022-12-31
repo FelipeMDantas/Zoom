@@ -21,6 +21,7 @@ import { generateMeetingID } from "../utils/generateMeetingID";
 import { FieldErrorType, UserType } from "../utils/Types";
 import useFetchUsers from "../hooks/useFetchUsers";
 import useToast from "../hooks/useToast";
+import MeetingMaximumUserField from "../components/FormComponents/MeetingMaximumUserField";
 
 const VideoConference = () => {
   useAuth();
@@ -65,7 +66,7 @@ const VideoConference = () => {
       clonedShowErrors.meetingName.message = [];
     }
 
-    if (!selectedUsers.length) {
+    if (!selectedUsers.length && !anyoneCanJoin) {
       clonedShowErrors.meetingUser.show = true;
       clonedShowErrors.meetingUser.message = ["Please select a user."];
       errors = true;
@@ -80,6 +81,7 @@ const VideoConference = () => {
   };
 
   const createMeeting = async () => {
+    console.log(validateForm());
     if (!validateForm()) {
       const meetingId = generateMeetingID();
       await addDoc(meetingsRef, {
@@ -100,6 +102,7 @@ const VideoConference = () => {
           : "Video Conference created successfully",
         type: "success",
       });
+      console.log("CONFERENCE");
       navigate("/");
     }
   };
@@ -126,17 +129,21 @@ const VideoConference = () => {
             isInvalid={showErrors.meetingName.show}
             error={showErrors.meetingName.message}
           />
-          <MeetingUsersField
-            label="Invite User"
-            options={users}
-            onChange={onUserChange}
-            selectedOptions={selectedUsers}
-            singleSelection={{ asPlainText: true }}
-            isClearable={false}
-            placeholder="Select a user"
-            isInvalid={showErrors.meetingUser.show}
-            error={showErrors.meetingUser.message}
-          />
+          {anyoneCanJoin ? (
+            <MeetingMaximumUserField value={size} setValue={setSize} />
+          ) : (
+            <MeetingUsersField
+              label="Invite User"
+              options={users}
+              onChange={onUserChange}
+              selectedOptions={selectedUsers}
+              singleSelection={false}
+              isClearable={false}
+              placeholder="Select a user"
+              isInvalid={showErrors.meetingUser.show}
+              error={showErrors.meetingUser.message}
+            />
+          )}
           <MeetingDateField selected={startDate} setStartDate={setStartDate} />
           <EuiSpacer />
           <CreateMeetingButtons createMeeting={createMeeting} />
