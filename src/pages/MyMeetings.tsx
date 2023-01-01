@@ -6,6 +6,7 @@ import { meetingsRef } from "../utils/FirebaseConfig";
 import { MeetingType } from "../utils/Types";
 import Header from "../components/Header";
 import {
+  EuiBadge,
   EuiBasicTable,
   EuiButtonIcon,
   EuiCopy,
@@ -13,42 +14,100 @@ import {
   EuiFlexItem,
   EuiPanel,
 } from "@elastic/eui";
+import moment from "moment";
+import { Link } from "react-router-dom";
+import EditFlyout from "../components/EditFlyout";
 
 const MyMeetings = () => {
   useAuth();
   const [meetings, setMeetings] = useState<any>([]);
   const userInfo = useAppSelector((zoom) => zoom.auth.userInfo);
 
-  useEffect(() => {
-    if (userInfo) {
-      const getMyMeetings = async () => {
-        const firestoreQuery = query(
-          meetingsRef,
-          where("createdBy", "==", userInfo?.uid)
-        );
-        const fetchedMeetings = await getDocs(firestoreQuery);
+  const getMyMeetings = async () => {
+    const firestoreQuery = query(
+      meetingsRef,
+      where("createdBy", "==", userInfo?.uid)
+    );
+    const fetchedMeetings = await getDocs(firestoreQuery);
 
-        if (fetchedMeetings.docs.length) {
-          const myMeetings: Array<MeetingType> = [];
-          fetchedMeetings.forEach((meeting) => {
-            myMeetings.push({
-              docId: meeting.id,
-              ...(meeting.data() as MeetingType),
-            });
-          });
-          setMeetings(myMeetings);
-        }
-      };
-      getMyMeetings();
+    if (fetchedMeetings.docs.length) {
+      const myMeetings: Array<MeetingType> = [];
+      fetchedMeetings.forEach((meeting) => {
+        myMeetings.push({
+          docId: meeting.id,
+          ...(meeting.data() as MeetingType),
+        });
+      });
+      setMeetings(myMeetings);
     }
+  };
+
+  useEffect(() => {
+    getMyMeetings();
   }, [userInfo]);
+
+  const [showEditFlyout, setShowEditFylout] = useState(false);
+  const [editMeeting, setEditMeeting] = useState<MeetingType>();
+
+  const openEditFlyout = (meeting: MeetingType) => {
+    setShowEditFylout(true);
+    setEditMeeting(meeting);
+  };
+
+  const closeEditFlyout = (dataChanged = false) => {
+    setShowEditFylout(false);
+    setEditMeeting(undefined);
+
+    if (dataChanged) getMyMeetings();
+  };
 
   const columns = [
     { field: "meetingName", name: "Meeting Name" },
     { field: "meetingType", name: "Meeting Type" },
     { field: "meetingDate", name: "Meeting Date" },
-    { field: "", name: "Status" },
-    { field: "", name: "Edit" },
+    {
+      field: "",
+      name: "Status",
+      render: (meeting: MeetingType) => {
+        if (meeting.status) {
+          if (meeting.meetingDate === moment().format("L")) {
+            return (
+              <EuiBadge color="success">
+                <Link
+                  style={{ color: "black" }}
+                  to={`/join/${meeting.meetingId}`}
+                >
+                  Join Now
+                </Link>
+              </EuiBadge>
+            );
+          } else if (
+            moment(meeting.meetingDate).isBefore(moment().format("L"))
+          ) {
+            return <EuiBadge color="default">Ended</EuiBadge>;
+          }
+        } else return <EuiBadge color="danger">Cancelled</EuiBadge>;
+      },
+    },
+    {
+      field: "",
+      name: "Edit",
+      render: (meeting: MeetingType) => {
+        return (
+          <EuiButtonIcon
+            aria-label="meeting-edit"
+            iconType="indexEdit"
+            color="danger"
+            display="base"
+            isDisabled={
+              !meeting.status ||
+              moment(meeting.meetingDate).isBefore(moment().format("L"))
+            }
+            onClick={() => openEditFlyout(meeting)}
+          />
+        );
+      },
+    },
     {
       field: "meetingId",
       name: "Copy Link",
@@ -80,6 +139,9 @@ const MyMeetings = () => {
           </EuiPanel>
         </EuiFlexItem>
       </EuiFlexGroup>
+      {showEditFlyout && (
+        <EditFlyout closeFlyout={closeEditFlyout} meetings={editMeeting!} />
+      )}
     </div>
   );
 };
