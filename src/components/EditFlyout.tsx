@@ -34,16 +34,13 @@ const EditFlyout = ({
   const [users] = useFetchUsers();
   const [createToast] = useToast();
 
-  const uid = useAppSelector((zoom) => zoom.auth.userInfo?.uid);
-
   const [meetingName, setMeetingName] = useState(meetings.meetingName);
   const [selectedUsers, setSelectedUsers] = useState<Array<UserType>>([]);
   const [startDate, setStartDate] = useState(moment(meetings.meetingDate));
   const [size, setSize] = useState(1);
-  const [anyoneCanJoin, setAnyoneCanJoin] = useState(false);
   const [meetingType, setMeetingType] = useState(meetings.meetingType);
   const [status, setStatus] = useState(false);
-  const [showErrors, setShowErrors] = useState<{
+  const [showErrors] = useState<{
     meetingName: FieldErrorType;
     meetingUser: FieldErrorType;
   }>({
@@ -71,32 +68,6 @@ const EditFlyout = ({
 
   const onUserChange = (selectedOptions: any) => {
     setSelectedUsers(selectedOptions);
-  };
-
-  const validateForm = () => {
-    let errors = false;
-    const clonedShowErrors = { ...showErrors };
-
-    if (!meetingName.length) {
-      clonedShowErrors.meetingName.show = true;
-      clonedShowErrors.meetingName.message = ["Please enter a meeting name."];
-      errors = true;
-    } else {
-      clonedShowErrors.meetingName.show = false;
-      clonedShowErrors.meetingName.message = [];
-    }
-
-    if (!selectedUsers.length && !anyoneCanJoin) {
-      clonedShowErrors.meetingUser.show = true;
-      clonedShowErrors.meetingUser.message = ["Please select a user."];
-      errors = true;
-    } else {
-      clonedShowErrors.meetingUser.show = false;
-      clonedShowErrors.meetingUser.message = [];
-    }
-
-    setShowErrors(clonedShowErrors);
-    return errors;
   };
 
   const editMeeting = async () => {
@@ -163,8 +134,8 @@ const EditFlyout = ({
           <EuiSpacer />
           <CreateMeetingButtons
             createMeeting={editMeeting}
-            // isEdit
-            // closeFlyout={closeFlyout}
+            isEdit
+            closeFlyout={closeFlyout}
           />
         </EuiForm>
       </EuiFlyoutBody>

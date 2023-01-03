@@ -16,50 +16,16 @@ import {
 } from "@elastic/eui";
 import moment from "moment";
 import { Link } from "react-router-dom";
-import EditFlyout from "../components/EditFlyout";
 
-const MyMeetings = () => {
+const Meeting = () => {
   useAuth();
   const [meetings, setMeetings] = useState<any>([]);
   const userInfo = useAppSelector((zoom) => zoom.auth.userInfo);
 
-  const getMyMeetings = async () => {
-    const firestoreQuery = query(
-      meetingsRef,
-      where("createdBy", "==", userInfo?.uid)
-    );
-    const fetchedMeetings = await getDocs(firestoreQuery);
-
-    if (fetchedMeetings.docs.length) {
-      const myMeetings: Array<MeetingType> = [];
-      fetchedMeetings.forEach((meeting) => {
-        myMeetings.push({
-          docId: meeting.id,
-          ...(meeting.data() as MeetingType),
-        });
-      });
-      setMeetings(myMeetings);
-    }
-  };
-
   useEffect(() => {
-    getMyMeetings();
+    if (userInfo) {
+    }
   }, [userInfo]);
-
-  const [showEditFlyout, setShowEditFylout] = useState(false);
-  const [editMeeting, setEditMeeting] = useState<MeetingType>();
-
-  const openEditFlyout = (meeting: MeetingType) => {
-    setShowEditFylout(true);
-    setEditMeeting(meeting);
-  };
-
-  const closeEditFlyout = (dataChanged = false) => {
-    setShowEditFylout(false);
-    setEditMeeting(undefined);
-
-    if (dataChanged) getMyMeetings();
-  };
 
   const columns = [
     { field: "meetingName", name: "Meeting Name" },
@@ -89,25 +55,6 @@ const MyMeetings = () => {
             return <EuiBadge color="primary">Upcoming</EuiBadge>;
           }
         } else return <EuiBadge color="danger">Cancelled</EuiBadge>;
-      },
-    },
-    {
-      field: "",
-      name: "Edit",
-      render: (meeting: MeetingType) => {
-        return (
-          <EuiButtonIcon
-            aria-label="meeting-edit"
-            iconType="indexEdit"
-            color="danger"
-            display="base"
-            isDisabled={
-              !meeting.status ||
-              moment(meeting.meetingDate).isBefore(moment().format("L"))
-            }
-            onClick={() => openEditFlyout(meeting)}
-          />
-        );
       },
     },
     {
@@ -141,11 +88,8 @@ const MyMeetings = () => {
           </EuiPanel>
         </EuiFlexItem>
       </EuiFlexGroup>
-      {showEditFlyout && (
-        <EditFlyout closeFlyout={closeEditFlyout} meetings={editMeeting!} />
-      )}
     </div>
   );
 };
 
-export default MyMeetings;
+export default Meeting;

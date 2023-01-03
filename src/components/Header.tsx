@@ -14,6 +14,7 @@ import { useAppSelector } from "../app/hooks";
 import { changeTheme } from "../app/slices/AuthSlice";
 import {
   getCreateMeetingBreadCrumbs,
+  getMyMeetingsBreadCrumbs,
   getOneOnOneMeetingBreadCrumbs,
   getVideoConferenceBreadCrumbs,
 } from "../utils/breadCrumbs";
@@ -41,6 +42,8 @@ const Header = () => {
       setBreadCrumbs(getOneOnOneMeetingBreadCrumbs(navigate));
     else if (pathname === "/videoconference")
       setBreadCrumbs(getVideoConferenceBreadCrumbs(navigate));
+    else if (pathname === "/mymeetings")
+      setBreadCrumbs(getMyMeetingsBreadCrumbs(navigate));
   }, [location, navigate]);
 
   const invertTheme = () => {
