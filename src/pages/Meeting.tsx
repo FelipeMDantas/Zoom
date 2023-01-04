@@ -24,6 +24,31 @@ const Meeting = () => {
 
   useEffect(() => {
     if (userInfo) {
+      const getUserMeetings = async () => {
+        const firestoreQuery = query(meetingsRef);
+        const fetchedMeetings = await getDocs(firestoreQuery);
+
+        if (fetchedMeetings.docs.length) {
+          const myMeetings: Array<MeetingType> = [];
+          fetchedMeetings.forEach((meeting) => {
+            const data = meeting.data() as MeetingType;
+
+            if (data.createdBy === userInfo?.uid) myMeetings.push(data);
+            else if (data.meetingType === "anyone-can-join")
+              myMeetings.push(data);
+            else {
+              const index = data.invitedUsers.findIndex(
+                (user) => user === userInfo.uid
+              );
+
+              if (index !== -1) {
+                myMeetings.push(data);
+              }
+            }
+          });
+        }
+      };
+      getUserMeetings();
     }
   }, [userInfo]);
 
