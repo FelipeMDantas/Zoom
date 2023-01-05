@@ -46,6 +46,7 @@ const Meeting = () => {
               }
             }
           });
+          setMeetings(myMeetings);
         }
       };
       getUserMeetings();
