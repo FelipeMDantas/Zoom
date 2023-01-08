@@ -1,46 +1,45 @@
-# Getting Started with Create React App
+# Zoom
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## A Zoom look-alike.
 
-## Available Scripts
+![Felipe|Zoom](https://img.shields.io/badge/FelipeMDantas-Zoom-blue)
 
-In the project directory, you can run:
+<p>
 
-### `npm start`
+![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
+![Firebase](https://img.shields.io/badge/Firebase-039BE5?style=for-the-badge&logo=Firebase&logoColor=white)
+![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+> This project is a Zoom inspired app that allows its users to authenticate with a Google account - with Firebase - create, edit, delete and take part in one-on-one or group video meetings.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+### Take a look at the page
 
-### `npm test`
+<img src = images/page_gif.gif>
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Tech
 
-### `npm run build`
+A couple of technologies were employed in this project. Among them:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- [ReactJS] - a JavaScript library for building user interfaces
+- [NPM] - a package manager
+- [TypeScript] - a strongly typed programming language that builds on JavaScript
+- [Elastic UI] - a design library
+- [Redux Toolkit] - simplifies the implementation of common Redux use cases like store setup and reducers creation
+- [Firebase] - Google's Backend as a Service
+- [React Router DOM] - DOM bindings for React Router
+- [Moment] - a date library for parsing, validating, manipulating, and formatting dates
+- [ZegoCloud] - an audio and video cloud services provider
+- [Dotenv] - a module that loads environment variables from a .env file into process.env.
+- [Prettier] - a code formatter
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+  [reactjs]: https://reactjs.org/
+  [npm]: https://www.npmjs.com/
+  [typescript]: https://www.typescriptlang.org/
+  [elastic ui]: https://elastic.github.io/eui/#/
+  [redux toolkit]: https://redux-toolkit.js.org/
+  [firebase]: https://firebase.google.com/
+  [react router dom]: https://reactrouter.com/
+  [moment]: https://github.com/moment/moment
+  [zegocloud]: https://www.zegocloud.com/
+  [dotenv]: https://dotenv.org/
+  [prettier]: https://prettier.io/
